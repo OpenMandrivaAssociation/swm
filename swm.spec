@@ -1,6 +1,6 @@
 %define	ver	1.2.5
 %define	relver	1.2.3
-%define	rel	5mdk
+%define	rel	%mkrel 5
 %define	name	swm
 
 Name:		%{name}
