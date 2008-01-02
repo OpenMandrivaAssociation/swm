@@ -11,6 +11,7 @@ License:	GPL
 URL:		http://www.informatik.hu-berlin.de/prog/swm.html
 Source0:	http://www.informatik.hu-berlin.de/prog/%{name}-%{relver}-src.tar.bz2
 Patch0:		swm-makefile.fix.relocate.patch.bz2
+BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires:	X11-devel
 Group:		Graphical desktop/Other
 Summary:	A small window manager for X11
