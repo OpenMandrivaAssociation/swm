@@ -1,0 +1,19 @@
+--- Makefile.link	2011-02-01 10:44:04.000000000 +0100
++++ Makefile	2011-02-01 10:45:01.000000000 +0100
+@@ -25,13 +25,13 @@
+ all: swm swmswitch swmbg
+ 
+ swm: $(OBJS)
+-	$(CC) -pipe $(DEFINES) $(LDPATH) -lXext -lX11 $(OBJS) -o $@
++	$(CC) -pipe $(DEFINES) $(LDPATH) $(OBJS) -o $@ -lX11
+ 
+ swmswitch: $(SWOBJS)
+-	$(CC) -pipe $(DEFINES) $(LDPATH) -lX11 $(SWOBJS) -o $@
++	$(CC) -pipe $(DEFINES) $(LDPATH) $(SWOBJS) -o $@ -lX11
+ 
+ swmbg: $(BGOBJS)
+-	$(CC) -pipe $(LDPATH) -lX11 -lXpm $(BGOBJS) -o $@
++	$(CC) -pipe $(LDPATH) $(BGOBJS) -o $@ -lX11 -lXpm
+ 
+ $(OBJS): %.o: %.c $(HEADERS)
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<

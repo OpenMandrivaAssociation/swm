@@ -1,0 +1,53 @@
+--- Makefile.dir	2001-03-14 18:32:21.000000000 +0100
++++ Makefile	2011-02-01 10:54:13.000000000 +0100
+@@ -11,6 +11,7 @@
+ #LDPATH	 = -L$(XROOT)/lib -L/skiff/local/arm-linux/lib -L/skiff/local/lib/gcc-lib/arm-linux/2.95.2
+ #INCLPATH = -I$(XROOT)/include -I/skiff/local/include -I/usr/include 
+ 
++PREFIX   = /usr
+ XROOT    = /usr/X11R6
+ INCLPATH = -I$(XROOT)/include
+ LDPATH   = -L$(XROOT)/lib
+@@ -42,18 +43,15 @@
+ 	$(CC) -c $(CFLAGS) $(INCLPATH) $<
+ 
+ install: all
+-	install -s swm $(XROOT)/bin
+-	install -s swmswitch $(XROOT)/bin
+-	install -s swmbg $(XROOT)/bin
+-	rm -f $(XROOT)/man/man1/swm*
+-	cp -f swm.1x $(XROOT)/man/man1
+-	cp -f swm-de.1x $(XROOT)/man/man1
+-	cp -f swmbg.1x $(XROOT)/man/man1
+-	gzip -9 $(XROOT)/man/man1/swm.1x
+-	gzip -9 $(XROOT)/man/man1/swm-de.1x
+-	gzip -9 $(XROOT)/man/man1/swmbg.1x
+-	cp startswm $(XROOT)/bin
+-	cp -v -f -r share/swm /usr/share
++	install -s swm $(PREFIX)/bin
++	install -s swmswitch $(PREFIX)/bin
++	install -s swmbg $(PREFIX)/bin
++	rm -f $(PREFIX)/share/man/man1/swm*
++	cp -f swm.1x $(PREFIX)/share/man/man1
++	cp -f swm-de.1x $(PREFIX)/share/man/man1
++	cp -f swmbg.1x $(PREFIX)/share/man/man1
++	cp startswm $(PREFIX)/bin
++	cp -v -f -r share/swm $(PREFIX)/share
+ 
+ rpm-build: all
+ 	install -s swm ../rpm-build$(XROOT)/bin
+@@ -67,12 +65,12 @@
+ 	gzip -9 ../rpm-build$(XROOT)/man/man1/swm-de.1x
+ 	gzip -9 ../rpm-build$(XROOT)/man/man1/swmbg.1x
+ 	cp startswm ../rpm-build$(XROOT)/bin
+-	cp -v -f -r share/swm ../rpm-build/usr/share/swm
++	cp -v -f -r share/swm ../rpm-build/$(PREFIX)/share/swm
+ 
+ uninstall: all
+ 	rm $(XROOT)/bin/swm $(XROOT)/bin/swmbg $(XROOT)/bin/startswm $(XROOT)/bin/swmswitch
+ 	rm $(XROOT)/man/man1/swm*
+-	rm -f /usr/doc/swm*
++	rm -f $(PREFIX)/doc/swm*
+ 
+ clean:
+ 	rm -f swm swmbg swmswitch *.o $(SWOBJS) $(OBJS)
