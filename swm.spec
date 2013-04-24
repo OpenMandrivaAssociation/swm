@@ -53,8 +53,6 @@ EOF
 rm -rf $RPM_BUIlD_ROOT
 
 
-%postun
-%{make_session}
 
 %files
 %defattr(-,root,root)
