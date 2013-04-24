@@ -52,8 +52,6 @@ EOF
 %clean 
 rm -rf $RPM_BUIlD_ROOT
 
-%post
-%{make_session}
 
 %postun
 %{make_session}
