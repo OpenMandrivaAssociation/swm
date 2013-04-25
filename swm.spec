@@ -1,17 +1,13 @@
-%define	ver	1.2.5
 %define	relver	1.2.3
-%define	rel	%mkrel 10
-%define	name	swm
 
-Name:		%{name}
-Version:	%{ver}
-Release:	%{rel}
+Name:		swm
+Version:	1.2.5
+Release:	11
 License:	GPL
 URL:		http://www.informatik.hu-berlin.de/prog/swm.html
 Source0:	http://www.informatik.hu-berlin.de/prog/%{name}-%{relver}-src.tar.bz2
 Patch0:		swm-makefile.fix.relocate.patch
 Patch1:		swm-1.2.3-link.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-buildroot
 BuildRequires:	libx11-devel
 BuildRequires:	libxpm-devel
 Group:		Graphical desktop/Other
@@ -31,17 +27,16 @@ with a resolution of 640x400 pixels and above. (Or with PDA-mode
 %make CFLAGS="%optflags" CC="gcc %ldflags"
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
-mkdir -p $RPM_BUILD_ROOT%{_bindir}
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
+mkdir -p %{buildroot}%{_mandir}/man1
+mkdir -p %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_datadir}/%{name}
 
-make PREFIX=$RPM_BUILD_ROOT%{_prefix} install
+make PREFIX=%{buildroot}%{_prefix} install
 
-#install -D -m 644 PATCHES/* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{ver}/PATCHES
+#install -D -m 644 PATCHES/* %{buildroot}%{_docdir}/%{name}-%{ver}/PATCHES
 
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmsession.d
-cat << EOF > $RPM_BUILD_ROOT%{_sysconfdir}/X11/wmsession.d/12swm
+mkdir -p %{buildroot}%{_sysconfdir}/X11/wmsession.d
+cat << EOF > %{buildroot}%{_sysconfdir}/X11/wmsession.d/12swm
 NAME=Swm
 DESC=Swm Window manager
 EXEC=%{_bindir}/startswm
@@ -49,13 +44,8 @@ SCRIPT:
 exec %{_bindir}/startswm
 EOF
 
-%clean 
-rm -rf $RPM_BUIlD_ROOT
-
-
 
 %files
-%defattr(-,root,root)
 %{_bindir}/*
 %{_mandir}/man1/*
 %doc TODO README LIESMICH COMPILE_PARAMS AUTHORS README.iPaq COPYING
