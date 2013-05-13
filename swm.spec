@@ -2,7 +2,7 @@
 
 Name:		swm
 Version:	1.2.5
-Release:	11
+Release:	12
 License:	GPL
 URL:		http://www.informatik.hu-berlin.de/prog/swm.html
 Source0:	http://www.informatik.hu-berlin.de/prog/%{name}-%{relver}-src.tar.bz2
