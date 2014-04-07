@@ -24,9 +24,9 @@
 -	gzip -9 $(XROOT)/man/man1/swmbg.1x
 -	cp startswm $(XROOT)/bin
 -	cp -v -f -r share/swm /usr/share
-+	install -s swm $(PREFIX)/bin
-+	install -s swmswitch $(PREFIX)/bin
-+	install -s swmbg $(PREFIX)/bin
++	install swm $(PREFIX)/bin
++	install swmswitch $(PREFIX)/bin
++	install swmbg $(PREFIX)/bin
 +	rm -f $(PREFIX)/share/man/man1/swm*
 +	cp -f swm.1x $(PREFIX)/share/man/man1
 +	cp -f swm-de.1x $(PREFIX)/share/man/man1
