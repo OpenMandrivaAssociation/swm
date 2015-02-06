@@ -3,7 +3,7 @@
 Summary:	A small window manager for X11
 Name:		swm
 Version:	1.2.5
-Release:	13
+Release:	14
 License:	GPLv2+
 Group:		Graphical desktop/Other
 Url:		http://www.informatik.hu-berlin.de/prog/swm.html
