@@ -6,7 +6,7 @@ Version:	1.2.5
 Release:	14
 License:	GPLv2+
 Group:		Graphical desktop/Other
-Url:		http://www.informatik.hu-berlin.de/prog/swm.html
+Url:		https://www.informatik.hu-berlin.de/prog/swm.html
 Source0:	http://www.informatik.hu-berlin.de/prog/%{name}-%{relver}-src.tar.bz2
 Patch0:		swm-makefile.fix.relocate.patch
 Patch1:		swm-1.2.3-link.patch
