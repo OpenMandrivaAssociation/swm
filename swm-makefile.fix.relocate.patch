@@ -1,53 +1,193 @@
---- Makefile.dir	2001-03-14 18:32:21.000000000 +0100
-+++ Makefile	2011-02-01 10:54:13.000000000 +0100
-@@ -11,6 +11,7 @@
- #LDPATH	 = -L$(XROOT)/lib -L/skiff/local/arm-linux/lib -L/skiff/local/lib/gcc-lib/arm-linux/2.95.2
- #INCLPATH = -I$(XROOT)/include -I/skiff/local/include -I/usr/include 
+diff -Naur swm-1.3.4.orig/src/Makefile-noxpm swm-1.3.4.reloc/src/Makefile-noxpm
+--- src/Makefile-noxpm	2004-06-24 22:02:00.000000000 +0200
++++ src/Makefile-noxpm	2026-08-03 04:56:19.584980160 +0200
+@@ -5,6 +5,8 @@
+ #for production use
+ CFLAGS   = -O3 -s
  
 +PREFIX   = /usr
- XROOT    = /usr/X11R6
- INCLPATH = -I$(XROOT)/include
- LDPATH   = -L$(XROOT)/lib
-@@ -42,18 +43,15 @@
- 	$(CC) -c $(CFLAGS) $(INCLPATH) $<
++
+ # There should be nothing to edit below this line
+ # -----------------------------------------------------------------------------
+ CC			= gcc
+@@ -26,21 +28,14 @@
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
  
- install: all
--	install -s swm $(XROOT)/bin
--	install -s swmswitch $(XROOT)/bin
--	install -s swmbg $(XROOT)/bin
--	rm -f $(XROOT)/man/man1/swm*
--	cp -f swm.1x $(XROOT)/man/man1
--	cp -f swm-de.1x $(XROOT)/man/man1
--	cp -f swmbg.1x $(XROOT)/man/man1
--	gzip -9 $(XROOT)/man/man1/swm.1x
--	gzip -9 $(XROOT)/man/man1/swm-de.1x
--	gzip -9 $(XROOT)/man/man1/swmbg.1x
--	cp startswm $(XROOT)/bin
--	cp -v -f -r share/swm /usr/share
+ install: 
+-	install -s swm $(INSTALLROOT)/$(XROOT)/bin
+-	rm -f $(INSTALLROOT)/$(XROOT)/man/man1/swm.* $(INSTALLROOT)/$(XROOT)/man/man1/swm-* 
+-	cp -f swm.1x $(INSTALLROOT)/$(XROOT)/man/man1
+-	cp -f swm-de.1x $(INSTALLROOT)/$(XROOT)/man/man1
+-	gzip -f -9 $(INSTALLROOT)/$(XROOT)/man/man1/swm.1x
+-	gzip -f -9 $(INSTALLROOT)/$(XROOT)/man/man1/swm-de.1x
+-	cp startswm $(INSTALLROOT)/$(XROOT)/bin
+-	cd ../swmswitch ; make install ; cd -
+-	cd ../swmbg ; make install ; cd -
+-	rm -rf $(INSTALLROOT)/usr/share/doc/swm
+-	mkdir $(INSTALLROOT)/usr/share/doc/swm
+-	cp -r ../doc/* $(INSTALLROOT)/usr/share/doc/swm/
+-	install -f ../examples/wmsession.d/12SWM /etc/X11/wmsession.d/ 
+-	chmod a+rx $(INSTALLROOT)/$(XROOT)/bin/*swm
+-	if [ -x /usr/sbin/fndSession ]; then /usr/sbin/fndSession || true ; fi
 +	install swm $(PREFIX)/bin
-+	install swmswitch $(PREFIX)/bin
-+	install swmbg $(PREFIX)/bin
-+	rm -f $(PREFIX)/share/man/man1/swm*
++	rm -f $(PREFIX)/share/man/man1/swm.* $(PREFIX)/share/man/man1/swm-* 
 +	cp -f swm.1x $(PREFIX)/share/man/man1
 +	cp -f swm-de.1x $(PREFIX)/share/man/man1
-+	cp -f swmbg.1x $(PREFIX)/share/man/man1
 +	cp startswm $(PREFIX)/bin
-+	cp -v -f -r share/swm $(PREFIX)/share
++	cd ../swmswitch ; $(MAKE) PREFIX=$(PREFIX) install ; cd -
++	cd ../swmbg ; $(MAKE) PREFIX=$(PREFIX) install ; cd -
++	chmod a+rx $(PREFIX)/bin/*swm
  
- rpm-build: all
- 	install -s swm ../rpm-build$(XROOT)/bin
-@@ -67,12 +65,12 @@
- 	gzip -9 ../rpm-build$(XROOT)/man/man1/swm-de.1x
- 	gzip -9 ../rpm-build$(XROOT)/man/man1/swmbg.1x
- 	cp startswm ../rpm-build$(XROOT)/bin
--	cp -v -f -r share/swm ../rpm-build/usr/share/swm
-+	cp -v -f -r share/swm ../rpm-build/$(PREFIX)/share/swm
+ rpm-build: 
+ 	install -s swm ../../rpm-build$(XROOT)/bin
+@@ -74,9 +69,9 @@
+ 	cp -f ../examples/wmsession.d/12SWM ../../rpm-build/etc/X11/wmsession.d/
  
  uninstall: all
- 	rm $(XROOT)/bin/swm $(XROOT)/bin/swmbg $(XROOT)/bin/startswm $(XROOT)/bin/swmswitch
- 	rm $(XROOT)/man/man1/swm*
--	rm -f /usr/doc/swm*
+-	rm $(INSTALLROOT)/$(XROOT)/bin/swm $(INSTALLROOT)/$(XROOT)/bin/startswm 
+-	rm $(INSTALLROOT)/$(XROOT)/man/man1/swm*
+-	rm -f $(INSTALLROOT)/usr/doc/swm*
++	rm $(PREFIX)/bin/swm $(PREFIX)/bin/startswm 
++	rm $(PREFIX)/share/man/man1/swm*
 +	rm -f $(PREFIX)/doc/swm*
  
  clean:
- 	rm -f swm swmbg swmswitch *.o $(SWOBJS) $(OBJS)
+ 	rm -f *~ swm core *.o $(OBJS)
+diff -Naur swm-1.3.4.orig/src/Makefile-xpm swm-1.3.4.reloc/src/Makefile-xpm
+--- src/Makefile-xpm	2004-06-24 22:00:53.000000000 +0200
++++ src/Makefile-xpm	2026-08-03 04:56:19.584914280 +0200
+@@ -8,6 +8,8 @@
+ # if you want swm to be installed somewhere else:
+ # INSTALLROOT = /where/ever/you/want 
+ 
++PREFIX   = /usr
++
+ # There should be nothing to edit below this line
+ # -----------------------------------------------------------------------------
+ CC			= gcc
+@@ -29,23 +31,16 @@
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+ 
+ install: 
+-	install -s swm $(INSTALLROOT)/$(XROOT)/bin
+-	rm -f $(INSTALLROOT)/$(XROOT)/man/man1/swm.* $(INSTALLROOT)/$(XROOT)/man/man1/swm-* 
+-	cp -f swm.1x $(INSTALLROOT)/$(XROOT)/man/man1
+-	cp -f swm-de.1x $(INSTALLROOT)/$(XROOT)/man/man1
+-	gzip -f -9 $(INSTALLROOT)/$(XROOT)/man/man1/swm.1x
+-	gzip -f -9 $(INSTALLROOT)/$(XROOT)/man/man1/swm-de.1x
+-	cp startswm $(INSTALLROOT)/$(XROOT)/bin
+-	cp -v -f -r ../share/ $(INSTALLROOT)/usr/
+-	cd ../swmswitch ; make install ; cd -
+-	cd ../swmbg ; make install ; cd -
+-	rm -rf $(INSTALLROOT)/usr/share/doc/swm
+-	mkdir $(INSTALLROOT)/usr/share/doc/swm
+-	cp -r ../doc/* $(INSTALLROOT)/usr/share/doc/swm/
+-	install ../examples/wmsession.d/12SWM /etc/X11/wmsession.d/ 
+-	chmod a+rx -R $(INSTALLROOT)/usr/share/swm
+-	chmod a+rx $(INSTALLROOT)/$(XROOT)/bin/*swm
+-	if [ -x /usr/sbin/fndSession ]; then /usr/sbin/fndSession || true ; fi
++	install swm $(PREFIX)/bin
++	rm -f $(PREFIX)/share/man/man1/swm.* $(PREFIX)/share/man/man1/swm-* 
++	cp -f swm.1x $(PREFIX)/share/man/man1
++	cp -f swm-de.1x $(PREFIX)/share/man/man1
++	cp startswm $(PREFIX)/bin
++	cp -v -f -r ../share/swm $(PREFIX)/share
++	cd ../swmswitch ; $(MAKE) PREFIX=$(PREFIX) install ; cd -
++	cd ../swmbg ; $(MAKE) PREFIX=$(PREFIX) install ; cd -
++	chmod a+rx -R $(PREFIX)/share/swm
++	chmod a+rx $(PREFIX)/bin/*swm
+ 
+ rpm-build: 
+ 	install -s swm ../../rpm-build$(XROOT)/bin
+@@ -81,10 +76,10 @@
+ 	cp -f ../examples/wmsession.d/12SWM ../../rpm-build/etc/X11/wmsession.d/
+ 
+ uninstall: all
+-	rm $(INSTALLROOT)/$(XROOT)/bin/swm $(INSTALLROOT)/$(XROOT)/bin/startswm 
+-	rm $(INSTALLROOT)/$(XROOT)/man/man1/swm*
+-	rm -f $(INSTALLROOT)/usr/doc/swm*
+-	rm -rf $(INSTALLROOT)/usr/share/swm
++	rm $(PREFIX)/bin/swm $(PREFIX)/bin/startswm 
++	rm $(PREFIX)/share/man/man1/swm*
++	rm -f $(PREFIX)/doc/swm*
++	rm -rf $(PREFIX)/share/swm
+ 
+ clean:
+ 	rm -f *~ swm core *.o $(OBJS)
+diff -Naur swm-1.3.4.orig/swmbg/Makefile swm-1.3.4.reloc/swmbg/Makefile
+--- swmbg/Makefile	2001-10-09 18:01:43.000000000 +0200
++++ swmbg/Makefile	2026-08-03 04:56:19.585029881 +0200
+@@ -1,5 +1,7 @@
+ CFLAGS   = -O3 -Wall  
+ 
++PREFIX   = /usr
++
+ # There should be nothing to edit below this line
+ # -----------------------------------------------------------------------------
+ CC			= gcc
+@@ -20,12 +22,12 @@
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+ 
+ install: all
+-	rm -f $(XROOT)/man/man1/swmbg*
+-	cp -f swmbg.1x $(XROOT)/man/man1
+-	cp -f swmbg-de.1x $(XROOT)/man/man1
+-	gzip -f -9 $(XROOT)/man/man1/swmbg.1x
+-	gzip -f -9 $(XROOT)/man/man1/swmbg-de.1x
+-	cp -v -f -r pixmaps/ /usr/share/swm/
++	install swmbg $(PREFIX)/bin
++	rm -f $(PREFIX)/share/man/man1/swmbg*
++	cp -f swmbg.1x $(PREFIX)/share/man/man1
++	cp -f swmbg-de.1x $(PREFIX)/share/man/man1
++	mkdir -p $(PREFIX)/share/swm
++	cp -v -f -r pixmaps/ $(PREFIX)/share/swm/
+ 
+ rpm-build: all
+ 	install -s swmbg ../../rpm-build$(XROOT)/bin
+@@ -37,8 +39,8 @@
+ 	cp -v -f -r pixmaps/ ../../rpm-build/usr/share/swm/
+ 
+ uninstall: all
+-	rm $(XROOT)/bin/swmbg 
+-	rm $(XROOT)/man/man1/swmbg*
++	rm $(PREFIX)/bin/swmbg 
++	rm $(PREFIX)/share/man/man1/swmbg*
+ 
+ clean:
+ 	rm -f *~ swmbg core *.o $(BGOBJS)
+diff -Naur swm-1.3.4.orig/swmswitch/Makefile swm-1.3.4.reloc/swmswitch/Makefile
+--- swmswitch/Makefile	2001-10-10 13:17:13.000000000 +0200
++++ swmswitch/Makefile	2026-08-03 04:56:19.585074462 +0200
+@@ -1,5 +1,7 @@
+ CFLAGS   = -O3 -Wall  
+ 
++PREFIX   = /usr
++
+ # There should be nothing to edit below this line
+ # -----------------------------------------------------------------------------
+ CC			= gcc
+@@ -20,10 +22,9 @@
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+ 
+ install: all 
+-	rm -f $(XROOT)/man/man1/swmswitch*
+-	cp -f swmswitch.1x $(XROOT)/man/man1
+-	gzip -f -9 $(XROOT)/man/man1/swmswitch.1x
+-	install -s swmswitch $(XROOT)/bin
++	install swmswitch $(PREFIX)/bin
++	rm -f $(PREFIX)/share/man/man1/swmswitch*
++	cp -f swmswitch.1x $(PREFIX)/share/man/man1
+ 
+ rpm-build: all
+ 	install -s swmswitch ../../rpm-build$(XROOT)/bin
+@@ -32,8 +33,8 @@
+ 	gzip -f -9 ../../rpm-build$(XROOT)/man/man1/swmswitch.1x
+ 
+ uninstall: 
+-	rm -f $(XROOT)/bin/swmswitch 
+-	rm -f $(XROOT)/man/man1/swmswitch*
++	rm -f $(PREFIX)/bin/swmswitch 
++	rm -f $(PREFIX)/share/man/man1/swmswitch*
+ 
+ clean:
+ 	rm -f *~ swmswitch core *.o $(BGOBJS)

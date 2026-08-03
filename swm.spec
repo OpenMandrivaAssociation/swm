@@ -1,13 +1,14 @@
-%define	relver	1.2.3
+# Tarball is swm-1.3.4c-src.tgz; top-level directory is swm-1.3.4
+%define	srcdir	1.3.4
 
 Summary:	A small window manager for X11
 Name:		swm
-Version:	1.2.5
-Release:	14
+Version:	1.3.4c
+Release:	1
 License:	GPLv2+
 Group:		Graphical desktop/Other
-Url:		https://www.informatik.hu-berlin.de/prog/swm.html
-Source0:	http://www.informatik.hu-berlin.de/prog/%{name}-%{relver}-src.tar.bz2
+Url:		https://swm.sourceforge.net/
+Source0:	https://swm.sourceforge.net/%{name}-%{version}-src.tgz
 Patch0:		swm-makefile.fix.relocate.patch
 Patch1:		swm-1.2.3-link.patch
 BuildRequires:	make
@@ -22,16 +23,16 @@ with a resolution of 640x400 pixels and above. (Or with PDA-mode
 %files
 %{_bindir}/*
 %{_mandir}/man1/*
-%doc TODO README LIESMICH COMPILE_PARAMS AUTHORS README.iPaq COPYING
+%doc doc/*
 %config(noreplace) %{_sysconfdir}/X11/wmsession.d/*
 %{_datadir}/%{name}
 
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q -n %{name}-%{relver}-src
-%patch0 -p0 -b .dir
-%patch1 -p0
+%setup -q -n %{name}-%{srcdir}
+%patch -P0 -p0 -b .dir
+%patch -P1 -p0
 
 %build
 %make CFLAGS="%{optflags}" CC="gcc %{ldflags}"

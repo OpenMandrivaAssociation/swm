@@ -1,19 +1,48 @@
---- Makefile.link	2011-02-01 10:44:04.000000000 +0100
-+++ Makefile	2011-02-01 10:45:01.000000000 +0100
-@@ -25,13 +25,13 @@
- all: swm swmswitch swmbg
+diff -Naur post-reloc/src/Makefile-noxpm post-both/src/Makefile-noxpm
+--- src/Makefile-noxpm	2026-08-03 04:57:23.947459601 +0200
++++ src/Makefile-noxpm	2026-08-03 04:57:23.964458298 +0200
+@@ -22,7 +22,7 @@
+ 	rm -f *.o  
  
  swm: $(OBJS)
--	$(CC) -pipe $(DEFINES) $(LDPATH) -lXext -lX11 $(OBJS) -o $@
-+	$(CC) -pipe $(DEFINES) $(LDPATH) $(OBJS) -o $@ -lX11
- 
- swmswitch: $(SWOBJS)
--	$(CC) -pipe $(DEFINES) $(LDPATH) -lX11 $(SWOBJS) -o $@
-+	$(CC) -pipe $(DEFINES) $(LDPATH) $(SWOBJS) -o $@ -lX11
- 
- swmbg: $(BGOBJS)
--	$(CC) -pipe $(LDPATH) -lX11 -lXpm $(BGOBJS) -o $@
-+	$(CC) -pipe $(LDPATH) $(BGOBJS) -o $@ -lX11 -lXpm
+-	$(CC) $(LDFLAGS) $(DEFINES) $(LDPATH) -lX11 $(OBJS) -o $@
++	$(CC) $(LDFLAGS) $(DEFINES) $(LDPATH) $(OBJS) -o $@ -lX11
  
  $(OBJS): %.o: %.c $(HEADERS)
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+diff -Naur post-reloc/src/Makefile-xpm post-both/src/Makefile-xpm
+--- src/Makefile-xpm	2026-08-03 04:57:23.947506642 +0200
++++ src/Makefile-xpm	2026-08-03 04:57:23.964409857 +0200
+@@ -25,7 +25,7 @@
+ 	rm -f *.o  
+ 
+ swm: $(OBJS)
+-	$(CC) $(LDFLAGS) $(DEFINES) $(LDPATH) -lX11 -lXpm $(OBJS) -o $@
++	$(CC) $(LDFLAGS) $(DEFINES) $(LDPATH) $(OBJS) -o $@ -lX11 -lXpm
+ 
+ $(OBJS): %.o: %.c $(HEADERS)
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+diff -Naur post-reloc/swmbg/Makefile post-both/swmbg/Makefile
+--- swmbg/Makefile	2026-08-03 04:57:23.947535012 +0200
++++ swmbg/Makefile	2026-08-03 04:57:23.964496818 +0200
+@@ -16,7 +16,7 @@
+ 	rm -f *.o 
+ 
+ swmbg: $(BGOBJS)
+-	$(CC) -s -pipe -msmall $(DEFINES) $(LDPATH) -lX11 -lXext -lXpm $(BGOBJS) -o $@
++	$(CC) -s -pipe -msmall $(DEFINES) $(LDPATH) $(BGOBJS) -o $@ -lX11 -lXext -lXpm
+ 
+ $(BGOBJS): %.o: %.c $(HEADERS)
+ 	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
+diff -Naur post-reloc/swmswitch/Makefile post-both/swmswitch/Makefile
+--- swmswitch/Makefile	2026-08-03 04:57:23.947561513 +0200
++++ swmswitch/Makefile	2026-08-03 04:57:23.964534579 +0200
+@@ -16,7 +16,7 @@
+ 	rm -f *.o
+ 
+ swmswitch: $(SWOBJS)
+-	$(CC) -s -pipe -msmall $(DEFINES) $(LDPATH) -lX11 $(SWOBJS) -o $@
++	$(CC) -s -pipe -msmall $(DEFINES) $(LDPATH) $(SWOBJS) -o $@ -lX11
+ 
+ $(SWOBJS): %.o: %.c 
  	$(CC) -c $(CFLAGS) $(DEFINES) $(INCLPATH) $<
